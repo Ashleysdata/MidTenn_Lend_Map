@@ -1,0 +1,113 @@
+<svg width="920" height="550" viewBox="0 0 920 550" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', Arial, sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#95A5A6"/>
+    </marker>
+    <marker id="arr-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#1E8449"/>
+    </marker>
+  </defs>
+
+  <rect width="920" height="550" fill="white"/>
+
+  <!-- Title -->
+  <text x="460" y="32" text-anchor="middle" font-size="19" font-weight="bold" fill="#2C3E50">MidTenn Lend Map — Data Pipeline Architecture</text>
+
+  <!-- Column backgrounds -->
+  <rect x="10"  y="45" width="155" height="370" rx="8" fill="#EBF5FB" stroke="#AED6F1" stroke-width="1.2"/>
+  <rect x="175" y="45" width="140" height="370" rx="8" fill="#FEF9E7" stroke="#F9E79F" stroke-width="1.2"/>
+  <rect x="325" y="45" width="195" height="370" rx="8" fill="#EAFAF1" stroke="#A9DFBF" stroke-width="1.2"/>
+  <rect x="530" y="45" width="165" height="370" rx="8" fill="#F5EEF8" stroke="#D2B4DE" stroke-width="1.2"/>
+  <rect x="705" y="45" width="205" height="370" rx="8" fill="#FDF2F8" stroke="#F1948A" stroke-width="1.2"/>
+
+  <!-- Column headers -->
+  <text x="87"  y="68" text-anchor="middle" font-size="12" font-weight="bold" fill="#2471A3">&#x1F50C; Sources</text>
+  <text x="245" y="68" text-anchor="middle" font-size="12" font-weight="bold" fill="#B7770D">&#x1F5C4; Raw Lake</text>
+  <text x="422" y="68" text-anchor="middle" font-size="12" font-weight="bold" fill="#1E8449">&#x2699; Transform (SQLMesh)</text>
+  <text x="612" y="68" text-anchor="middle" font-size="12" font-weight="bold" fill="#7D3C98">&#x2601; Serving Layer</text>
+  <text x="807" y="68" text-anchor="middle" font-size="12" font-weight="bold" fill="#C0392B">&#x1F4CA; Analytics</text>
+
+  <!-- Source boxes -->
+  <rect x="22" y="82"  width="130" height="34" rx="6" fill="white" stroke="#2471A3" stroke-width="1.5"/>
+  <text x="87" y="104" text-anchor="middle" font-size="12" font-weight="600" fill="#2471A3">FRED API</text>
+
+  <rect x="22" y="128" width="130" height="34" rx="6" fill="white" stroke="#2471A3" stroke-width="1.5"/>
+  <text x="87" y="150" text-anchor="middle" font-size="12" font-weight="600" fill="#2471A3">SBA Loans</text>
+
+  <rect x="22" y="174" width="130" height="34" rx="6" fill="white" stroke="#2471A3" stroke-width="1.5"/>
+  <text x="87" y="196" text-anchor="middle" font-size="12" font-weight="600" fill="#2471A3">FDIC API</text>
+
+  <rect x="22" y="220" width="130" height="34" rx="6" fill="white" stroke="#2471A3" stroke-width="1.5"/>
+  <text x="87" y="242" text-anchor="middle" font-size="12" font-weight="600" fill="#2471A3">Census API</text>
+
+  <rect x="22" y="266" width="130" height="34" rx="6" fill="white" stroke="#2471A3" stroke-width="1.5"/>
+  <text x="87" y="288" text-anchor="middle" font-size="12" font-weight="600" fill="#2471A3">CFPB API</text>
+
+  <!-- Raw Lake boxes -->
+  <rect x="183" y="128" width="124" height="52" rx="6" fill="white" stroke="#B7770D" stroke-width="1.5"/>
+  <text x="245" y="150" text-anchor="middle" font-size="13" font-weight="700" fill="#B7770D">MinIO</text>
+  <text x="245" y="168" text-anchor="middle" font-size="10" fill="#7F8C8D">Object Storage (S3-compatible)</text>
+
+  <rect x="183" y="208" width="124" height="52" rx="6" fill="white" stroke="#B7770D" stroke-width="1.5"/>
+  <text x="245" y="230" text-anchor="middle" font-size="13" font-weight="700" fill="#B7770D">DuckDB</text>
+  <text x="245" y="248" text-anchor="middle" font-size="10" fill="#7F8C8D">Embedded Analytics Engine</text>
+
+  <!-- Transform boxes -->
+  <rect x="337" y="82"  width="171" height="56" rx="6" fill="white" stroke="#1E8449" stroke-width="2"/>
+  <text x="422" y="106" text-anchor="middle" font-size="13" fill="#1E8449">Bronze Layer</text>
+  <text x="422" y="126" text-anchor="middle" font-size="11" fill="#555">5 raw source tables</text>
+
+  <rect x="337" y="168" width="171" height="56" rx="6" fill="white" stroke="#1E8449" stroke-width="2"/>
+  <text x="422" y="192" text-anchor="middle" font-size="13" fill="#1E8449">Silver Layer</text>
+  <text x="422" y="212" text-anchor="middle" font-size="11" fill="#555">Cleaned, typed &amp; joined</text>
+
+  <rect x="337" y="254" width="171" height="56" rx="6" fill="white" stroke="#1E8449" stroke-width="2"/>
+  <text x="422" y="278" text-anchor="middle" font-size="13" fill="#1E8449">Gold Layer</text>
+  <text x="422" y="298" text-anchor="middle" font-size="11" fill="#555">13 business-ready tables</text>
+
+  <!-- Serving boxes -->
+  <rect x="542" y="140" width="141" height="56" rx="6" fill="white" stroke="#7D3C98" stroke-width="1.5"/>
+  <text x="612" y="163" text-anchor="middle" font-size="13" font-weight="700" fill="#7D3C98">Snowflake</text>
+  <text x="612" y="183" text-anchor="middle" font-size="10" fill="#7F8C8D">Cloud Data Warehouse</text>
+
+  <rect x="542" y="232" width="141" height="56" rx="6" fill="white" stroke="#7D3C98" stroke-width="1.5"/>
+  <text x="612" y="255" text-anchor="middle" font-size="13" font-weight="700" fill="#7D3C98">PostgreSQL</text>
+  <text x="612" y="275" text-anchor="middle" font-size="10" fill="#7F8C8D">Local DB (Docker)</text>
+
+  <!-- Analytics boxes -->
+  <rect x="717" y="140" width="181" height="56" rx="6" fill="white" stroke="#C0392B" stroke-width="1.5"/>
+  <text x="807" y="163" text-anchor="middle" font-size="13" font-weight="700" fill="#C0392B">Power BI</text>
+  <text x="807" y="182" text-anchor="middle" font-size="10" fill="#7F8C8D">6 pages · drill-through · Snowflake</text>
+
+  <rect x="717" y="232" width="181" height="56" rx="6" fill="white" stroke="#C0392B" stroke-width="1.5"/>
+  <text x="807" y="255" text-anchor="middle" font-size="13" font-weight="700" fill="#C0392B">Metabase</text>
+  <text x="807" y="274" text-anchor="middle" font-size="10" fill="#7F8C8D">3 tabs · County filter · PostgreSQL</text>
+
+  <!-- Arrows: Sources to Raw Lake -->
+  <line x1="152" y1="99"  x2="181" y2="150" stroke="#95A5A6" stroke-width="1.4" marker-end="url(#arr)"/>
+  <line x1="152" y1="145" x2="181" y2="158" stroke="#95A5A6" stroke-width="1.4" marker-end="url(#arr)"/>
+  <line x1="152" y1="191" x2="181" y2="165" stroke="#95A5A6" stroke-width="1.4" marker-end="url(#arr)"/>
+  <line x1="152" y1="237" x2="181" y2="230" stroke="#95A5A6" stroke-width="1.4" marker-end="url(#arr)"/>
+  <line x1="152" y1="283" x2="181" y2="248" stroke="#95A5A6" stroke-width="1.4" marker-end="url(#arr)"/>
+
+  <!-- Raw Lake to Bronze -->
+  <line x1="307" y1="158" x2="335" y2="120" stroke="#95A5A6" stroke-width="1.4" marker-end="url(#arr)"/>
+  <line x1="307" y1="238" x2="335" y2="140" stroke="#95A5A6" stroke-width="1.4" marker-end="url(#arr)"/>
+
+  <!-- Bronze to Silver to Gold -->
+  <line x1="422" y1="138" x2="422" y2="166" stroke="#1E8449" stroke-width="2" marker-end="url(#arr-green)"/>
+  <line x1="422" y1="224" x2="422" y2="252" stroke="#1E8449" stroke-width="2" marker-end="url(#arr-green)"/>
+
+  <!-- Gold to Serving -->
+  <line x1="508" y1="272" x2="540" y2="180" stroke="#95A5A6" stroke-width="1.4" marker-end="url(#arr)"/>
+  <line x1="508" y1="292" x2="540" y2="265" stroke="#95A5A6" stroke-width="1.4" marker-end="url(#arr)"/>
+
+  <!-- Serving to Analytics -->
+  <line x1="683" y1="168" x2="715" y2="168" stroke="#95A5A6" stroke-width="1.4" marker-end="url(#arr)"/>
+  <line x1="683" y1="260" x2="715" y2="260" stroke="#95A5A6" stroke-width="1.4" marker-end="url(#arr)"/>
+
+  <!-- Prefect bar -->
+  <rect x="10" y="448" width="900" height="74" rx="8" fill="#EAFAF1" stroke="#27AE60" stroke-width="2" stroke-dasharray="6 3"/>
+  <text x="460" y="476" text-anchor="middle" font-size="14" font-weight="bold" fill="#1E8449">&#x26A1; Prefect Orchestration</text>
+  <text x="460" y="500" text-anchor="middle" font-size="11" fill="#555">Automated end-to-end pipeline scheduling — Ingest → Upload → SQLMesh → Export | Daily @ 2:00 AM</text>
+</svg>
