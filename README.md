@@ -18,10 +18,6 @@ Data sources include:
 
 The result: a continuously updated platform that turns open government data into a competitive intelligence tool for lending teams.
 
-## Architecture
-
-![MidTenn Lend Map Architecture](docs/architecture.svg)
-
 ## System Architecture
 
 | Technology | Purpose/Role |
@@ -31,8 +27,6 @@ The result: a continuously updated platform that turns open government data into
 | **MinIO** | Object storage (S3-compatible) for raw data lake |
 | **DuckDB** | High-performance analytical query engine |
 | **SQLMesh** | ELT transformations across Bronze / Silver / Gold layers |
-| **Snowflake** | Cloud data warehouse for Gold layer serving |
-| **Power BI** | Business intelligence dashboards and map visualizations |
 | **Metabase** | BI dashboards and interactive visualizations |
 | **Docker** | Containerization and local environment |
 | **pytest** | Unit testing framework |
@@ -40,42 +34,20 @@ The result: a continuously updated platform that turns open government data into
 ## Medallion Architecture
 
 ```
-                                                      ┌→ PostgreSQL → Metabase   (ops/monitoring)
-Raw APIs → MinIO (raw lake) → DuckDB + SQLMesh        │
-                              (Bronze→Silver→Gold) ───┤
-                                                      └→ Snowflake  → Power BI   (business/executive)
+Raw APIs → MinIO (raw lake) → DuckDB + SQLMesh (Bronze → Silver → Gold) → PostgreSQL → Metabase
 ```
 
 - **Bronze Layer**: Raw data ingested from APIs, stored as-is in DuckDB
 - **Silver Layer**: Cleaned, standardized, and deduplicated data
-- **Gold Layer**: 13 business-ready analytics tables exported to two serving paths:
-
-| Table | Description |
-|-------|-------------|
-| `loan_opportunity` | Lending demand score by county |
-| `industry_analysis` | SBA loan volume by industry and county |
-| `risk_signals` | Consumer complaint rates and dispute metrics |
-| `macro_trends` | FRED macroeconomic indicators over time |
-| `county_demographics` | Census income, poverty, and population data |
-| `competitive_whitespace` | Bank density gaps vs. population and income |
-| `customer_profile` | Borrower and loan size characteristics |
-| `loan_demand_trend` | Year-over-year SBA loan volume by county |
-| `loan_health` | Approval rates and job creation metrics |
-| `county_coordinates` | Geographic coordinates for map visualizations |
-| `rate_sensitivity` | Loan activity segmented by interest rate environment |
-| `quarterly_lending_pulse` | Quarterly loan volume vs. Fed Funds Rate |
-| `industry_yoy_growth` | Year-over-year industry loan growth with rankings |
-
-- **Path 1 — Metabase**: Gold tables exported to PostgreSQL, served via Metabase for operational monitoring
-- **Path 2 — Power BI**: Gold tables exported to Snowflake, connected to Power BI for executive dashboards and map visualizations
+- **Gold Layer**: Business-ready aggregations (loan volume by county, approval rates by industry, etc.)
 
 ## Key Insights Delivered
 
-- **Opportunity Heat Map** — Which Middle Tennessee counties have the highest unmet small business lending demand
-- **Target Industry Segments** — Which industries have the highest approval rates and growth trajectories
-- **Competitive White Space** — Where rivals are underrepresented, revealing first-mover opportunities
-- **Risk Intelligence** — High-complaint areas and macro risk signals overlaid with opportunity data
-- **Growth Trend Forecasting** — Forward-looking analysis based on population, income, and economic activity
+- 📍 **Opportunity Heat Map** — Which Middle Tennessee counties have the highest unmet small business lending demand
+- 🏭 **Target Industry Segments** — Which industries have the highest approval rates and growth trajectories
+- 🏦 **Competitive White Space** — Where rivals are underrepresented, revealing first-mover opportunities
+- ⚠️ **Risk Intelligence** — High-complaint areas and macro risk signals overlaid with opportunity data
+- 📈 **Growth Trend Forecasting** — Forward-looking analysis based on population, income, and economic activity
 
 ## Installation & Local Development
 
@@ -132,41 +104,39 @@ MidTenn-Lend-Map/
 ├── docker-compose.yml
 ├── pyproject.toml
 ├── README.md
-├── docs/
-│   └── architecture.svg  # Pipeline architecture diagram
-├── models/
-│   ├── bronze/           # Raw ingestion models (5 sources)
-│   ├── silver/           # Cleaned and deduplicated models
-│   └── gold/             # Business-ready analytics tables (13 models)
 ├── src/
 │   ├── ingestion/        # API ingestion scripts (FRED, SBA, CFPB, FDIC, Census)
+│   ├── models/           # SQLMesh Bronze / Silver / Gold models
 │   └── pipeline/         # Prefect flow definitions
-└── tests/                # pytest unit and data quality tests
+└── tests/                # pytest unit tests
 ```
+
+## AI-Enhanced Analytics Layer 🚧
+
+Building three AI capability layers on top of the existing gold-layer data:
+
+### Week 1: Prompt Engineering Foundations ✅
+See companion project: [prompt-comparison-benchmark](https://github.com/Ashleysdata/prompt-comparison-benchmark)
+
+### Week 2: Text-to-SQL Layer ✅
+Added `text_to_sql.py` — translates natural language questions into DuckDB SQL 
+queries against the gold-layer tables (loan_health, risk_signals, county_demographics), 
+executes them, and returns results.
+
+**Example:**
+- Q: "Which county has the most loans with a delinquent or charged-off status?"
+- Generated SQL: `SELECT county FROM gold.loan_health WHERE loan_status = 'CHGOFF' GROUP BY county ORDER BY SUM(total_loans) DESC LIMIT 1`
+- A: Rutherford County
+
+### Week 3: AI Dashboard Insights (planned)
+### Week 4: RAG Knowledge Base (planned)
 
 ## Data Coverage
 
-**Geographic Focus**: 12 Middle Tennessee Counties
-- Davidson (Nashville), Williamson (Franklin/Brentwood), Rutherford (Murfreesboro), Montgomery (Clarksville)
-- Wilson (Lebanon), Sumner (Gallatin), Maury (Columbia), Putnam (Cookeville)
-- Dickson, Robertson (Springfield), Bedford (Shelbyville), Coffee (Tullahoma)
+**Geographic Focus**: Middle Tennessee
+- Davidson County (Nashville)
+- Williamson County (Franklin, Brentwood)
+- Rutherford County (Murfreesboro)
+- Montgomery County (Clarksville)
 
-**Time Range**: 2019 – Present
-
-**Data Volume**:
-- 2,300+ SBA loan records
-- 52,000+ CFPB complaint records
-- 152 FDIC bank institutions
-- 60 Census ACS demographic snapshots (12 counties × 5 years)
-- 6 FRED macroeconomic series
-
-## Data Quality
-
-32 automated tests run with `uv run pytest`:
-
-- **Unit tests** — FRED and FDIC ingestion functions validated with mocks (no real API calls)
-- **Bronze layer** — All 5 source tables verified to have data after ingestion
-- **Silver layer** — No null approval dates, no duplicate complaint IDs, date range enforcement (2019+)
-- **Gold layer** — All 13 analytics tables verified, 12 counties present, all 6 FRED series loaded
-
-> Note: U.S. Census ACS 5-year data has a 2-year publication lag. The most recent available year is 2023. 2024–2025 population figures are estimated using historical county growth rates.
+**Time Range**: 2019 – Present (5-year window capturing post-COVID growth surge)
