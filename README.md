@@ -115,10 +115,10 @@ MidTenn-Lend-Map/
 
 Building three AI capability layers on top of the existing gold-layer data:
 
-### Week 1: Prompt Engineering Foundations ✅
+### Week 1: Prompt Engineering Foundations 
 See companion project: [prompt-comparison-benchmark](https://github.com/Ashleysdata/prompt-comparison-benchmark)
 
-### Week 2: Text-to-SQL Layer ✅
+### Week 2: Text-to-SQL Layer 
 Added `text_to_sql.py` — translates natural language questions into DuckDB SQL 
 queries against the gold-layer tables (loan_health, risk_signals, county_demographics), 
 executes them, and returns results.
@@ -128,8 +128,29 @@ executes them, and returns results.
 - Generated SQL: `SELECT county FROM gold.loan_health WHERE loan_status = 'CHGOFF' GROUP BY county ORDER BY SUM(total_loans) DESC LIMIT 1`
 - A: Rutherford County
 
-### Week 3: AI Dashboard Insights (planned)
-### Week 4: RAG Knowledge Base (planned)
+### Week 3: AI Dashboard Insights 
+Added `dashboard_insights.py` — generates natural-language insight summaries 
+from SBA loan KPI snapshots (loan volume, average loan size, top industry, 
+month-over-month change), intended for embedding in a Power BI dashboard visual.
+
+**Example:**
+- Input: `{"period": "2026-09", "total_loans": 210, "total_amount": 51000000, 
+  "avg_loan_size": 242857, "top_industry": "Construction", "mom_change_pct": -38.7}`
+- Output: "September saw a dramatic 38.7% decline in loan volume from August, 
+  dropping to just 210 loans, though the story is more nuanced than it first 
+  appears. Despite fewer transactions, total lending actually increased to 
+  $51 million because average loan size nearly doubled to roughly $243,000..."
+
+
+### Week 4: RAG Knowledge Base 
+Added `build_knowledge_base.py` and `rag_query.py` — chunks project documentation, 
+generates embeddings via Voyage AI, and retrieves relevant context to answer 
+natural-language questions about the project using Claude.
+
+**Example:**
+- Q: "What data sources does this project use?"
+- A: Correctly identified all five data sources (FRED, SBA, CFPB, FDIC, Census) 
+  with their specific roles, grounded entirely in the README content.
 
 ## Data Coverage
 
@@ -140,3 +161,5 @@ executes them, and returns results.
 - Montgomery County (Clarksville)
 
 **Time Range**: 2019 – Present (5-year window capturing post-COVID growth surge)
+
+RAG retrieval now uses PostgreSQL + pgvector for similarity search (previously local numpy cosine similarity over a saved .npz file), moving the knowledge base from a local file to a queryable vector database.
