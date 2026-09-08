@@ -70,7 +70,4 @@ def main_flow():
 
 
 if __name__ == "__main__":
-    main_flow.serve(
-        name="midtenn-daily",
-        cron="0 2 * * *",  # every day at 2am
-    )
+    main_flow()
