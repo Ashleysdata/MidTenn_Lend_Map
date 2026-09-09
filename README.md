@@ -152,6 +152,16 @@ natural-language questions about the project using Claude.
 - A: Correctly identified all five data sources (FRED, SBA, CFPB, FDIC, Census) 
   with their specific roles, grounded entirely in the README content.
 
+### Week 4b: RAG Eval Framework 
+Added `eval/` — 10 hand-labeled questions with reference answers, spanning 
+easy/medium/hard difficulty plus an out-of-scope "trap" question, run against 
+the live RAG pipeline and graded by Claude-as-judge on relevance, accuracy, 
+and groundedness (is the answer actually supported by the retrieved chunks, 
+or hallucinated?). See `eval/eval_report.md` for the full per-question report.
+
+**Latest results (10/10 questions):** 5.00 relevance, 5.00 accuracy, 4.40 
+groundedness (avg, 1-5 scale); 3/10 answers flagged for possible hallucination.
+
 ## Data Coverage
 
 **Geographic Focus**: Middle Tennessee
