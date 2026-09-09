@@ -1,0 +1,72 @@
+[
+  {
+    "id": "q1",
+    "difficulty": "easy",
+    "category": "data_sources",
+    "question": "What data sources does this project use?",
+    "reference_answer": "FRED (interest rates and macroeconomic indicators), SBA (small business loan approvals by region/industry), CFPB (consumer financial complaints), FDIC (bank distribution, market share, financial health), and U.S. Census Bureau (income, poverty rate, business demographics by county)."
+  },
+  {
+    "id": "q2",
+    "difficulty": "easy",
+    "category": "architecture",
+    "question": "What workflow orchestration tool does this project use?",
+    "reference_answer": "Prefect."
+  },
+  {
+    "id": "q3",
+    "difficulty": "medium",
+    "category": "architecture",
+    "question": "What is the difference between the Bronze, Silver, and Gold layers?",
+    "reference_answer": "Bronze is raw data ingested from APIs stored as-is in DuckDB. Silver is cleaned, standardized, and deduplicated data. Gold is business-ready aggregations like loan volume by county or approval rates by industry."
+  },
+  {
+    "id": "q4",
+    "difficulty": "medium",
+    "category": "installation",
+    "question": "What port does Metabase run on locally?",
+    "reference_answer": "http://localhost:3001"
+  },
+  {
+    "id": "q5",
+    "difficulty": "medium",
+    "category": "ai_layer",
+    "question": "What does the Week 2 Text-to-SQL layer do?",
+    "reference_answer": "text_to_sql.py translates natural language questions into DuckDB SQL queries against the gold-layer tables (loan_health, risk_signals, county_demographics), executes them, and returns results."
+  },
+  {
+    "id": "q6",
+    "difficulty": "medium",
+    "category": "structure",
+    "question": "Where do the SQLMesh Bronze/Silver/Gold models live in the project structure?",
+    "reference_answer": "In src/models/, described as the SQLMesh Bronze / Silver / Gold models directory."
+  },
+  {
+    "id": "q7",
+    "difficulty": "hard",
+    "category": "data_coverage",
+    "question": "Which counties are covered geographically, and what time range does the data span?",
+    "reference_answer": "Geographic focus: Davidson County (Nashville), Williamson County (Franklin, Brentwood), Rutherford County (Murfreesboro), and Montgomery County (Clarksville). Time range: 2019-Present, a 5-year window capturing the post-COVID growth surge."
+  },
+  {
+    "id": "q8",
+    "difficulty": "hard",
+    "category": "example",
+    "question": "In the text-to-SQL example, which county had the most loans with a delinquent or charged-off status, and what was the generated SQL doing?",
+    "reference_answer": "Rutherford County. The generated SQL selected county from gold.loan_health where loan_status = 'CHGOFF', grouped by county, and ordered by the sum of total_loans descending, limited to 1."
+  },
+  {
+    "id": "q9",
+    "difficulty": "hard",
+    "category": "companion_project",
+    "question": "What was Week 1 of the AI-Enhanced Analytics Layer, and where can I find it?",
+    "reference_answer": "Week 1 was Prompt Engineering Foundations, covered in a companion project called prompt-comparison-benchmark, linked on GitHub under Ashleysdata."
+  },
+  {
+    "id": "q10",
+    "difficulty": "trap",
+    "category": "out_of_scope",
+    "question": "Who is the CEO of Wilson Bank and Trust?",
+    "reference_answer": "The README does not mention a CEO for Wilson Bank and Trust. A good answer should say this isn't covered in the provided context rather than guessing a name."
+  }
+]

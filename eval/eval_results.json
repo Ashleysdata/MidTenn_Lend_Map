@@ -1,0 +1,222 @@
+[
+  {
+    "id": "q1",
+    "difficulty": "easy",
+    "category": "data_sources",
+    "question": "What data sources does this project use?",
+    "reference_answer": "FRED (interest rates and macroeconomic indicators), SBA (small business loan approvals by region/industry), CFPB (consumer financial complaints), FDIC (bank distribution, market share, financial health), and U.S. Census Bureau (income, poverty rate, business demographics by county).",
+    "rag_answer": "According to the excerpts, **MidTenn Lend Map** integrates five public data sources:\n\n1. **FRED (Federal Reserve)** \u2014 Interest rates and macroeconomic indicators\n2. **SBA (Small Business Administration)** \u2014 Small business loan approvals by region and industry\n3. **CFPB (Consumer Financial Protection Bureau)** \u2014 Consumer financial complaints across Middle Tennessee\n4. **FDIC (Federal Deposit Insurance Corporation)** \u2014 Bank distribution, market share, and financial health\n5. **U.S. Census Bureau** \u2014 Income, poverty rate, and business demographics by county\n\nThese sources are ingested into the system and transformed through a medallion architecture (Bronze \u2192 Silver \u2192 Gold layers) to create actionable lending intelligence.",
+    "retrieved_sources": [
+      "README.md (0.453)",
+      "README.md (0.367)",
+      "README.md (0.352)",
+      "README.md (0.344)",
+      "README.md (0.284)"
+    ],
+    "grade": {
+      "relevance": 5,
+      "accuracy": 5,
+      "groundedness": 3,
+      "hallucinated": true,
+      "notes": "Answer is relevant and accurate but includes specific details about what each source provides that aren't visible in the retrieved context chunks."
+    }
+  },
+  {
+    "id": "q2",
+    "difficulty": "easy",
+    "category": "architecture",
+    "question": "What workflow orchestration tool does this project use?",
+    "reference_answer": "Prefect.",
+    "rag_answer": "The project uses **Prefect** for workflow orchestration and scheduling.\n\nAccording to the documentation, you can:\n- Access the Prefect UI at http://localhost:4200\n- Run the Prefect pipeline locally with:\n```bash\nexport PREFECT_API_URL=\"http://localhost:4200/api\"\nuv run python src/pipeline/main_flow.py\n```\n\nPrefect flow definitions are located in the `src/pipeline/` directory.",
+    "retrieved_sources": [
+      "README.md (0.441)",
+      "README.md (0.344)",
+      "README.md (0.310)",
+      "README.md (0.303)",
+      "README.md (0.274)"
+    ],
+    "grade": {
+      "relevance": 5,
+      "accuracy": 5,
+      "groundedness": 5,
+      "hallucinated": false,
+      "notes": "Perfect answer with correct tool name and well-grounded supporting details from context."
+    }
+  },
+  {
+    "id": "q3",
+    "difficulty": "medium",
+    "category": "architecture",
+    "question": "What is the difference between the Bronze, Silver, and Gold layers?",
+    "reference_answer": "Bronze is raw data ingested from APIs stored as-is in DuckDB. Silver is cleaned, standardized, and deduplicated data. Gold is business-ready aggregations like loan volume by county or approval rates by industry.",
+    "rag_answer": "Based on the provided excerpts, the three layers serve different purposes in the data transformation pipeline:\n\n- **Bronze Layer**: Raw data ingested from APIs (FRED, SBA, CFPB, FDIC, U.S. Census Bureau), stored as-is in DuckDB without modification\n\n- **Silver Layer**: Cleaned, standardized, and deduplicated data\u2014essentially prepared data with quality improvements applied\n\n- **Gold Layer**: Business-ready aggregations and analytics, such as loan volume by county, approval rates by industry, and other KPIs ready for consumption in dashboards\n\nThe data flows through this medallion architecture: Raw APIs \u2192 MinIO \u2192 DuckDB + SQLMesh (Bronze \u2192 Silver \u2192 Gold) \u2192 PostgreSQL \u2192 Metabase, with each layer adding progressively more refinement and business value.",
+    "retrieved_sources": [
+      "README.md (0.315)",
+      "README.md (0.300)",
+      "README.md (0.251)",
+      "README.md (0.096)",
+      "README.md (0.086)"
+    ],
+    "grade": {
+      "relevance": 5,
+      "accuracy": 5,
+      "groundedness": 5,
+      "hallucinated": false,
+      "notes": "Perfectly addresses the question with accurate layer distinctions fully supported by context."
+    }
+  },
+  {
+    "id": "q4",
+    "difficulty": "medium",
+    "category": "installation",
+    "question": "What port does Metabase run on locally?",
+    "reference_answer": "http://localhost:3001",
+    "rag_answer": "According to the README.md, Metabase runs on **port 3001** locally.\n\nThe documentation states: \"Metabase: http://localhost:3001\"",
+    "retrieved_sources": [
+      "README.md (0.444)",
+      "README.md (0.327)",
+      "README.md (0.315)",
+      "README.md (0.253)",
+      "README.md (0.228)"
+    ],
+    "grade": {
+      "relevance": 5,
+      "accuracy": 5,
+      "groundedness": 3,
+      "hallucinated": true,
+      "notes": "Answer is correct (port 3001) but the supporting quote doesn't appear complete in the provided context chunks."
+    }
+  },
+  {
+    "id": "q5",
+    "difficulty": "medium",
+    "category": "ai_layer",
+    "question": "What does the Week 2 Text-to-SQL layer do?",
+    "reference_answer": "text_to_sql.py translates natural language questions into DuckDB SQL queries against the gold-layer tables (loan_health, risk_signals, county_demographics), executes them, and returns results.",
+    "rag_answer": "The Week 2 Text-to-SQL layer translates natural language questions into DuckDB SQL queries against the gold-layer tables (loan_health, risk_signals, county_demographics), executes those queries, and returns results.\n\n**Example:**\n- Question: \"Which county has the most loans with a delinquent or charged-off status?\"\n- Generated SQL: `SELECT county FROM gold.loan_health WHERE loan_status = 'CHGOFF' GROUP BY county ORDER BY SUM(total_loans) DESC LIMIT 1`\n- Answer: Rutherford County\n\nThis functionality is implemented in `text_to_sql.py`.",
+    "retrieved_sources": [
+      "README.md (0.574)",
+      "README.md (0.428)",
+      "README.md (0.352)",
+      "README.md (0.304)",
+      "README.md (0.260)"
+    ],
+    "grade": {
+      "relevance": 5,
+      "accuracy": 5,
+      "groundedness": 5,
+      "hallucinated": false,
+      "notes": "Perfect match with reference answer, all details supported by context including example query."
+    }
+  },
+  {
+    "id": "q6",
+    "difficulty": "medium",
+    "category": "structure",
+    "question": "Where do the SQLMesh Bronze/Silver/Gold models live in the project structure?",
+    "reference_answer": "In src/models/, described as the SQLMesh Bronze / Silver / Gold models directory.",
+    "rag_answer": "According to the project structure shown in the README.md, the SQLMesh Bronze/Silver/Gold models live in:\n\n```\nsrc/models/\n```\n\nThis directory contains the SQLMesh model definitions that implement the medallion architecture transformations across the Bronze, Silver, and Gold layers.",
+    "retrieved_sources": [
+      "README.md (0.392)",
+      "README.md (0.342)",
+      "README.md (0.278)",
+      "README.md (0.227)",
+      "README.md (0.208)"
+    ],
+    "grade": {
+      "relevance": 5,
+      "accuracy": 5,
+      "groundedness": 5,
+      "hallucinated": false,
+      "notes": "Answer correctly identifies src/models/ location matching the reference answer, fully supported by the retrieved context."
+    }
+  },
+  {
+    "id": "q7",
+    "difficulty": "hard",
+    "category": "data_coverage",
+    "question": "Which counties are covered geographically, and what time range does the data span?",
+    "reference_answer": "Geographic focus: Davidson County (Nashville), Williamson County (Franklin, Brentwood), Rutherford County (Murfreesboro), and Montgomery County (Clarksville). Time range: 2019-Present, a 5-year window capturing the post-COVID growth surge.",
+    "rag_answer": "Based on the provided excerpts, the **MidTenn Lend Map** project covers:\n\n## Geographic Coverage (Middle Tennessee)\n- **Davidson County** (Nashville)\n- **Williamson County** (Franklin, Brentwood)\n- **Rutherford County** (Murfreesboro)\n- **Montgomery County** (Clarksville)\n\n## Time Range\n**2019 \u2013 Present** (described as a \"5-year window capturing post-COVID growth surge\")",
+    "retrieved_sources": [
+      "README.md (0.452)",
+      "README.md (0.301)",
+      "README.md (0.289)",
+      "README.md (0.263)",
+      "README.md (0.230)"
+    ],
+    "grade": {
+      "relevance": 5,
+      "accuracy": 5,
+      "groundedness": 3,
+      "hallucinated": true,
+      "notes": "Answer is relevant and accurate but includes specific city names and county details not present in the provided context chunks."
+    }
+  },
+  {
+    "id": "q8",
+    "difficulty": "hard",
+    "category": "example",
+    "question": "In the text-to-SQL example, which county had the most loans with a delinquent or charged-off status, and what was the generated SQL doing?",
+    "reference_answer": "Rutherford County. The generated SQL selected county from gold.loan_health where loan_status = 'CHGOFF', grouped by county, and ordered by the sum of total_loans descending, limited to 1.",
+    "rag_answer": "Based on the excerpts provided:\n\n**Answer:** Rutherford County had the most loans with a delinquent or charged-off status.\n\n**What the generated SQL was doing:** The SQL query was:\n1. Selecting the county column from the `gold.loan_health` table\n2. Filtering for loans with a 'CHGOFF' (charged-off) status\n3. Grouping results by county\n4. Ordering by the sum of total loans in descending order\n5. Limiting the result to the top 1 county\n\nSo it was aggregating charged-off loans by county and returning the county with the highest total.",
+    "retrieved_sources": [
+      "README.md (0.564)",
+      "README.md (0.387)",
+      "README.md (0.335)",
+      "README.md (0.334)",
+      "README.md (0.319)"
+    ],
+    "grade": {
+      "relevance": 5,
+      "accuracy": 5,
+      "groundedness": 5,
+      "hallucinated": false,
+      "notes": "Answer correctly identifies Rutherford County and accurately explains all SQL operations from the context."
+    }
+  },
+  {
+    "id": "q9",
+    "difficulty": "hard",
+    "category": "companion_project",
+    "question": "What was Week 1 of the AI-Enhanced Analytics Layer, and where can I find it?",
+    "reference_answer": "Week 1 was Prompt Engineering Foundations, covered in a companion project called prompt-comparison-benchmark, linked on GitHub under Ashleysdata.",
+    "rag_answer": "According to the documentation, **Week 1 of the AI-Enhanced Analytics Layer was \"Prompt Engineering Foundations\"** and it has been completed (marked with \u2705).\n\nYou can find it in a **companion project** at: https://github.com/Ashleysdata/prompt-comparison-benchmark\n\nThis week focused on establishing the foundational prompt engineering work that supports the subsequent AI capabilities built on top of the gold-layer data.",
+    "retrieved_sources": [
+      "README.md (0.456)",
+      "README.md (0.317)",
+      "README.md (0.290)",
+      "README.md (0.235)",
+      "README.md (0.217)"
+    ],
+    "grade": {
+      "relevance": 5,
+      "accuracy": 5,
+      "groundedness": 5,
+      "hallucinated": false,
+      "notes": "Answer correctly identifies Week 1 as Prompt Engineering Foundations and references the companion project under Ashleysdata on GitHub."
+    }
+  },
+  {
+    "id": "q10",
+    "difficulty": "trap",
+    "category": "out_of_scope",
+    "question": "Who is the CEO of Wilson Bank and Trust?",
+    "reference_answer": "The README does not mention a CEO for Wilson Bank and Trust. A good answer should say this isn't covered in the provided context rather than guessing a name.",
+    "rag_answer": "I don't have that information in the provided excerpts. The documentation mentions Wilson Bank and Trust as an example of a community bank that could benefit from the MidTenn Lend Map platform, but it doesn't include details about the bank's leadership or CEO.",
+    "retrieved_sources": [
+      "README.md (0.327)",
+      "README.md (0.206)",
+      "README.md (0.189)",
+      "README.md (0.173)",
+      "README.md (0.168)"
+    ],
+    "grade": {
+      "relevance": 5,
+      "accuracy": 5,
+      "groundedness": 5,
+      "hallucinated": false,
+      "notes": "Correctly identifies the information is not in the context and declines to fabricate an answer."
+    }
+  }
+]
