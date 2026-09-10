@@ -1,7 +1,11 @@
 MODEL (
   name gold.loan_health,
   kind FULL,
-  description 'Gold 09: Loan status and charge-off rates by county and industry'
+  description 'Gold 09: Loan status and charge-off rates by county and industry',
+  audits (
+    not_null(columns := (county, loan_status)),
+    accepted_values(column := loan_status, is_in := ('EXEMPT', 'PIF', 'CANCLD', 'COMMIT', 'CHGOFF', 'NOT FUNDED'))
+  )
 );
 
 SELECT

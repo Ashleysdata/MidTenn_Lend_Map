@@ -41,6 +41,19 @@ Raw APIs → MinIO (raw lake) → DuckDB + SQLMesh (Bronze → Silver → Gold) 
 - **Silver Layer**: Cleaned, standardized, and deduplicated data
 - **Gold Layer**: Business-ready aggregations (loan volume by county, approval rates by industry, etc.)
 
+### Data Quality
+
+Key Silver/Gold models are checked with SQLMesh audits, run via `sqlmesh audit`:
+
+- `silver.sba_loans` — `not_null` on the core loan fields, and `unique_combination_of_columns`
+  to confirm the dedup logic (`QUALIFY ROW_NUMBER() ...`) is actually working
+- `gold.loan_health` — `not_null` on county/loan_status, and `accepted_values` to catch
+  any unexpected `loan_status` codes
+
+The FRED ingestion script (`fred_ingestion.py`) also fails loudly instead of writing a
+partial file if any series fails to fetch, since a silently incomplete raw file previously
+caused a downstream Bronze model to break on a missing series.
+
 ## Key Insights Delivered
 
 - 📍 **Opportunity Heat Map** — Which Middle Tennessee counties have the highest unmet small business lending demand

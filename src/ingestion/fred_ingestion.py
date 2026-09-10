@@ -45,6 +45,7 @@ def run():
     output_dir.mkdir(parents=True, exist_ok=True)
 
     all_data = {}
+    failed_series = []
 
     for series_id, label in SERIES.items():
         print(f"Fetching {series_id} ({label})...")
@@ -57,6 +58,14 @@ def run():
             print(f"  {len(observations)} observations")
         except requests.RequestException as e:
             print(f"  ERROR: {e}")
+            failed_series.append(series_id)
+
+    if failed_series:
+        raise RuntimeError(
+            f"Failed to fetch {len(failed_series)} series: {failed_series}. "
+            "Not writing a partial raw_data file, since downstream bronze "
+            "models assume every configured series is present."
+        )
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     output_file = output_dir / f"fred_data_{timestamp}.json"

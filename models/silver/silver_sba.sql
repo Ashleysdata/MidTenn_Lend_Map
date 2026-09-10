@@ -1,7 +1,11 @@
 MODEL (
   name silver.sba_loans,
   kind FULL,
-  description 'Silver layer: deduplicated and cleaned SBA loan data for Middle Tennessee'
+  description 'Silver layer: deduplicated and cleaned SBA loan data for Middle Tennessee',
+  audits (
+    not_null(columns := (project_county, gross_approval_amount, loan_status)),
+    unique_combination_of_columns(columns := (borrower_name, approval_date, gross_approval_amount))
+  )
 );
 
 SELECT
